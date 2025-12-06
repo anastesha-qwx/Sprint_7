@@ -1,18 +1,29 @@
 import requests
-from api.urls import BaseURL
+import allure
 from api.endpoints import Endpoints
 
 
 class CourierAPI:
+   
 
     @staticmethod
-    def create(data):
-        return requests.post(BaseURL.BASE + Endpoints.COURIER_CREATE, data=data)
+    @allure.step("Создаём курьера")
+    def create(data: dict):
+        """POST /api/v1/courier — JSON"""
+        url = Endpoints.make_url(Endpoints.COURIER_CREATE)
+        return requests.post(url, json=data)
 
     @staticmethod
-    def login(data):
-        return requests.post(BaseURL.BASE + Endpoints.COURIER_LOGIN, data=data)
+    @allure.step("Логиним курьера")
+    def login(data: dict):
+        """POST /api/v1/courier/login — form-data!"""
+        url = Endpoints.make_url(Endpoints.COURIER_LOGIN)
+        return requests.post(url, data=data)  
 
     @staticmethod
-    def delete(courier_id):
-        return requests.delete(BaseURL.BASE + Endpoints.COURIER_DELETE + str(courier_id))
+    @allure.step("Удаляем курьера по id = {courier_id}")
+    def delete(courier_id: int):
+        """DELETE /api/v1/courier/{id}"""
+        url = Endpoints.make_url(Endpoints.COURIER_DELETE) + str(courier_id)
+        return requests.delete(url)
+

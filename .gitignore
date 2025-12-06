@@ -1,6 +1,9 @@
+allure_results/
+allure-report/
+.allure/
+.pytest_cache/
 __pycache__/
-pytest_cache/
-.vscode/
+.venv/
 .idea/
-venv/
+.vscode/
 *.iml

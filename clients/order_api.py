@@ -1,25 +1,31 @@
 import requests
-from api.urls import BaseURL
+import allure
 from api.endpoints import Endpoints
 
 
 class OrderAPI:
 
     @staticmethod
-    def create(data):
-        return requests.post(BaseURL.BASE + Endpoints.ORDER_CREATE, json=data)
+    @allure.step("Создаём заказ")
+    def create(data: dict):
+        url = Endpoints.make_url(Endpoints.ORDER_CREATE)
+        return requests.post(url, json=data)
 
     @staticmethod
+    @allure.step("Получаем заказ по треку = {track}")
+    def get_by_track(track: int | None):
+        url = Endpoints.make_url(Endpoints.ORDER_TRACK)
+        params = None if track is None else {"t": track}
+        return requests.get(url, params=params)
+
+    @staticmethod
+    @allure.step("Получаем список заказов")
     def list_orders():
-        return requests.get(BaseURL.BASE + Endpoints.ORDERS_LIST)
+        url = Endpoints.make_url(Endpoints.ORDERS_LIST)
+        return requests.get(url)
 
     @staticmethod
-    def get_by_track(track):
-        return requests.get(BaseURL.BASE + Endpoints.ORDER_TRACK, params={"t": track})
-
-    @staticmethod
-    def accept(order_id, courier_id=None):
-        return requests.put(
-            BaseURL.BASE + Endpoints.ORDER_ACCEPT + str(order_id),
-            params={"courierId": courier_id}
-        )
+    @allure.step("Курьер {courier_id} принимает заказ {order_id}")
+    def accept(order_id: int, courier_id: int | None):
+        url = Endpoints.make_url(Endpoints.ORDER_ACCEPT) + str(order_id)
+        return requests.put(url, params={"courierId": courier_id})

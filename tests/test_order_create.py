@@ -4,9 +4,9 @@ from clients.order_api import OrderAPI
 from data.order_data import OrderData
 
 
-@allure.title("Создание заказа")
 class TestOrderCreate:
 
+    @allure.title("Создание заказа — 201 + track (параметризованные цвета)")
     @pytest.mark.parametrize("colors", [
         ["BLACK"],
         ["GREY"],
@@ -18,5 +18,7 @@ class TestOrderCreate:
         payload["color"] = colors
 
         response = OrderAPI.create(payload)
+        body = response.json()
+
         assert response.status_code == 201
-        assert "track" in response.json()
+        assert isinstance(body.get("track"), int)
