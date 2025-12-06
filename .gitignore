@@ -7,3 +7,13 @@ __pycache__/
 .idea/
 .vscode/
 *.iml
+venv/
+.venv/
+__pycache__/
+.pytest_cache/
+allure_results/
+allure-report/
+.allure/
+.idea/
+.vscode/
+*.iml
